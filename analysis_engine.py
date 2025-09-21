@@ -22,7 +22,7 @@ try:
         api_key=os.environ.get("CUSTOM_API_KEY"),
         base_url=os.environ.get("CUSTOM_BASE_URL"),
     )
-    sentence_model = SentenceTransformer('all-MiniLM-L6-v2')
+    # sentence_model = SentenceTransformer('all-MiniLM-L6-v2')
     print("AI models loaded successfully.")
 except Exception as e:
     print(f"Error loading AI models: {e}")
