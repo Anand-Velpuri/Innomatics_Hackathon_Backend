@@ -1,2 +1,2 @@
-mise use python@3.12
-mise install
+[tools]
+python = "3.12.7"
