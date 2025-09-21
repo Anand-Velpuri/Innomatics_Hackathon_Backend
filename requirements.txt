@@ -4,6 +4,7 @@
 # --- Core Framework ---
 fastapi
 uvicorn
+fastapi-proxiedheadersmiddleware
 
 # --- LLM & AI Libraries ---
 torch
