@@ -5,6 +5,7 @@
 fastapi
 uvicorn
 fastapi-proxiedheadersmiddleware
+python-multipart
 
 # --- LLM & AI Libraries ---
 torch
