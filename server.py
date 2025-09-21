@@ -5,8 +5,21 @@ import schemas
 import analysis_engine
 from typing import List
 from schemas import JobWithStats
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi_proxiedheadersmiddleware import ProxiedHeadersMiddleware
 
 app = FastAPI(title="Resume Analyzer and Job Board API")
+
+# Middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.add_middleware(ProxiedHeadersMiddleware)
 
 # Create database tables on startup
 @app.on_event("startup")
