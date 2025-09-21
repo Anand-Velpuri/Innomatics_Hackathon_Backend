@@ -3,7 +3,9 @@ import fitz  # PyMuPDF
 import docx
 import json
 from fuzzywuzzy import fuzz
-from sentence_transformers import SentenceTransformer, util
+# from sentence_transformers import SentenceTransformer, util
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
@@ -25,7 +27,7 @@ try:
 except Exception as e:
     print(f"Error loading AI models: {e}")
     llm = None
-    sentence_model = None
+    # sentence_model = None
 
 # --- Re-using the Pydantic class for JD Parsing ---
 class JobDescription(BaseModel):
@@ -93,13 +95,29 @@ def calculate_hard_match(resume_text: str, parsed_jd: dict) -> dict:
     must_have_score = len(found_skills) / len(must_have_skills) if must_have_skills else 1.0
     return {"score": must_have_score, "missing_skills": missing_skills}
 
-def calculate_semantic_match(resume_text: str, jd_text: str) -> float:
-    # (Same logic as in Colab)
-    resume_embedding = sentence_model.encode(resume_text, convert_to_tensor=True)
-    jd_embedding = sentence_model.encode(jd_text, convert_to_tensor=True)
-    cosine_score = util.cos_sim(resume_embedding, jd_embedding)
-    return cosine_score.item()
+# def calculate_semantic_match(resume_text: str, jd_text: str) -> float:
+#     # (Same logic as in Colab)
+#     resume_embedding = sentence_model.encode(resume_text, convert_to_tensor=True)
+#     jd_embedding = sentence_model.encode(jd_text, convert_to_tensor=True)
+#     cosine_score = util.cos_sim(resume_embedding, jd_embedding)
+#     return cosine_score.item()
 
+def calculate_semantic_match(resume_text: str, jd_text: str) -> float:
+    """
+    Calculates the semantic similarity using TF-IDF and cosine similarity
+    from scikit-learn.
+    """
+    vectorizer = TfidfVectorizer(stop_words='english')
+    corpus = [resume_text, jd_text]
+    
+    # Generate TF-IDF vectors
+    tfidf_matrix = vectorizer.fit_transform(corpus)
+    
+    # Calculate cosine similarity between the two vectors
+    # The result is a matrix, so we access the specific score at [0, 1]
+    similarity_score = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:2])[0][0]
+    
+    return float(similarity_score)
 
 
 def parse_job_document_to_fill_form(doc_text: str) -> dict:
