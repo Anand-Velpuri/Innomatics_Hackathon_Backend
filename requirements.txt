@@ -1,22 +1,25 @@
-# Core Framework
+# Tell pip to look for CPU-only PyTorch wheels here
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+# --- Core Framework ---
 fastapi
 uvicorn
 
-# LLM & AI Libraries
-langchain
-langchain-google-genai
-langchain-openai
-spacy
+# --- LLM & AI Libraries ---
 torch
 transformers
 sentence-transformers
+spacy
+langchain
+langchain-google-genai
+langchain-openai
 scikit-learn
 tiktoken
 openai
 google-ai-generativelanguage
 huggingface-hub
 
-# Data Handling & Utilities
+# --- Data Handling & Utilities ---
 numpy
 PyMuPDF
 python-docx
