@@ -8,9 +8,6 @@ fastapi-proxiedheadersmiddleware
 python-multipart
 
 # --- LLM & AI Libraries ---
-torch
-transformers
-sentence-transformers
 spacy
 langchain
 langchain-google-genai
